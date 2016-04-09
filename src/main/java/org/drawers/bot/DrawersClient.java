@@ -18,10 +18,6 @@ public class DrawersClient implements DrawersMessageListener {
         bot = new DrawersBot(clientId, password, this);
     }
 
-    protected void initializeBot(String clientId, String password) {
-        DrawersClient client = new DrawersClient(clientId, password);
-    }
-
     protected void startBot() {
         bot.start();
         try {

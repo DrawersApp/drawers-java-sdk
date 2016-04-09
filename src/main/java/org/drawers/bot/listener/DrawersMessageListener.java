@@ -1,4 +1,4 @@
-package org.drawers.bot;
+package org.drawers.bot.listener;
 
 import org.drawers.bot.dto.DrawersMessage;
 

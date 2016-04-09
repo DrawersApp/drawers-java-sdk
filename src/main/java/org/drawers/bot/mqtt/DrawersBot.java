@@ -1,8 +1,9 @@
-package org.drawers.bot;
+package org.drawers.bot.mqtt;
 
 import org.drawers.bot.crypto.DrawersCryptoEngine;
 import org.drawers.bot.dao.MqttChatMessage;
 import org.drawers.bot.dto.DrawersMessage;
+import org.drawers.bot.listener.DrawersMessageListener;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -34,7 +35,7 @@ public final class DrawersBot implements MqttCallback {
 
     private DrawersMessageListener messageListener;
 
-    public DrawersBot(String clientId, String password, DrawersClient messageListener) {
+    public DrawersBot(String clientId, String password, DrawersMessageListener messageListener) {
         this.clientId = clientId;
         this.password = password;
         this.messageListener = messageListener;
@@ -55,8 +56,8 @@ public final class DrawersBot implements MqttCallback {
     }
 
     public void start() {
-        MemoryPersistence persistence = new MemoryPersistence();
         try {
+            MemoryPersistence persistence = new MemoryPersistence();
             mqttClient = new MqttClient(getServerUrl(), clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(false);

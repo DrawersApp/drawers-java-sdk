@@ -84,5 +84,28 @@ public class MqttChatMessage {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        MqttChatMessage that = (MqttChatMessage) o;
+
+        if (deliveryReceipt != that.deliveryReceipt) return false;
+        if (!messageId.equals(that.messageId)) return false;
+        if (message != null ? !message.equals(that.message) : that.message != null) return false;
+        if (!senderUid.equals(that.senderUid)) return false;
+        return chatType == that.chatType;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = messageId.hashCode();
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + senderUid.hashCode();
+        result = 31 * result + chatType.hashCode();
+        result = 31 * result + (deliveryReceipt ? 1 : 0);
+        return result;
+    }
 }

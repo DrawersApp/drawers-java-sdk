@@ -9,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,6 +32,8 @@ public final class DrawersBot implements MqttCallback {
     private static final int SERVER_PORT = 80;
     private static final int SERVER_SECURE_PORT = 443;
     private static final int DEFAULT_THREAD_COUNT = 5;
+    private static final int MAX_MESSAGE_HISTORY = 20000;
+
 
     private DrawersMessageListener messageListener;
 
@@ -89,11 +91,23 @@ public final class DrawersBot implements MqttCallback {
         executorService.submit(() -> messageArrivedInternal(topic, message));
     }
 
+
+    Set<MqttChatMessage> messageHistory = Collections.newSetFromMap(new LinkedHashMap<MqttChatMessage, Boolean>(){
+        protected boolean removeEldestEntry(Map.Entry<MqttChatMessage, Boolean> eldest) {
+            return size() > MAX_MESSAGE_HISTORY;
+        }
+    });
+
     private void messageArrivedInternal(String topic, MqttMessage message) {
         try {
             String incomingMessage = new String(message.getPayload());
             String decryptedMessage = DRAWERS_CRYPTO_ENGINE.aesDecrypt(incomingMessage);
             MqttChatMessage chatMessage = MqttChatMessage.fromString(decryptedMessage);
+
+            if (!messageHistory.add(chatMessage)) {
+                return;
+            }
+
             DrawersMessage reply = messageListener.processMessageAndReply(new DrawersMessage(topic, URLDecoder.decode(chatMessage.getMessage(), "UTF-8")));
 
             MqttChatMessage replyChatMessage = new MqttChatMessage(UUID.randomUUID().toString(), URLEncoder.encode(reply.getMessage(), "UTF-8"),

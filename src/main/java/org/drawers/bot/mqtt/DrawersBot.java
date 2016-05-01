@@ -111,7 +111,7 @@ public final class DrawersBot implements MqttCallback {
             DrawersMessage reply = messageListener.processMessageAndReply(new DrawersMessage(topic, URLDecoder.decode(chatMessage.getMessage(), "UTF-8")));
 
             MqttChatMessage replyChatMessage = new MqttChatMessage(UUID.randomUUID().toString(), URLEncoder.encode(reply.getMessage(), "UTF-8"),
-                    mqttClient.getClientId(), MqttChatMessage.ChatConstant.ChatType.TEXT, false);
+                    mqttClient.getClientId(), reply.getChatType(), false);
 
             String encryptedMessage = DRAWERS_CRYPTO_ENGINE.aesEncrypt(MqttChatMessage.toJson(replyChatMessage));
             MqttMessage mqttMessage = new MqttMessage();

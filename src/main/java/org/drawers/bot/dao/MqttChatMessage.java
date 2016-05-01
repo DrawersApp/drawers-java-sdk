@@ -47,8 +47,6 @@ public class MqttChatMessage {
         return gson.toJson(chatMessage);
     }
 
-
-
     public static class ChatConstant {
         public enum ChatType {
             FILE(0),
@@ -59,7 +57,8 @@ public class MqttChatMessage {
             MAP(5),
             NOTIFICATION(6),
             CALL(7),
-            QA(8);
+            QA(8),
+            QAR(9);
 
             int pos;
             ChatType(int p) {
@@ -81,7 +80,6 @@ public class MqttChatMessage {
         static public boolean validType(ChatType type) {
             return mType.contains(type);
         }
-
     }
 
     @Override
@@ -96,7 +94,6 @@ public class MqttChatMessage {
         if (message != null ? !message.equals(that.message) : that.message != null) return false;
         if (!senderUid.equals(that.senderUid)) return false;
         return chatType == that.chatType;
-
     }
 
     @Override

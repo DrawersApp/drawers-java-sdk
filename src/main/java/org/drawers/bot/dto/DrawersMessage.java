@@ -1,6 +1,7 @@
 package org.drawers.bot.dto;
 
-import org.drawers.bot.dao.MqttChatMessage;
+
+import com.drawers.dao.ChatConstant;
 
 /**
  * Created by nishant.pathak on 08/04/16.
@@ -8,21 +9,21 @@ import org.drawers.bot.dao.MqttChatMessage;
 public class DrawersMessage {
     String sender;
     String message;
-    MqttChatMessage.ChatConstant.ChatType chatType;
+    ChatConstant.ChatType chatType;
 
     public DrawersMessage(String sender, String message) {
         this.sender = sender;
         this.message = message;
-        this.chatType = MqttChatMessage.ChatConstant.ChatType.TEXT;
+        this.chatType = ChatConstant.ChatType.TEXT;
     }
 
-    public DrawersMessage(String sender, String message, MqttChatMessage.ChatConstant.ChatType chatType) {
+    public DrawersMessage(String sender, String message, ChatConstant.ChatType chatType) {
         this.sender = sender;
         this.message = message;
         this.chatType = chatType;
     }
 
-    public MqttChatMessage.ChatConstant.ChatType getChatType() {
+    public ChatConstant.ChatType getChatType() {
         return chatType;
     }
 

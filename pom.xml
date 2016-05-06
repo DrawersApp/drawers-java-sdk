@@ -34,6 +34,11 @@
             <artifactId>drawers-models</artifactId>
             <version>master-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>drawers-java-sdk</finalName>

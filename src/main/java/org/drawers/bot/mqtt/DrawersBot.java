@@ -77,11 +77,11 @@ public final class DrawersBot implements MqttCallback {
 
         } catch (Exception ex) {
             ex.printStackTrace();
+            start();
         } finally {
             try {
                 System.err.println("Will retry after 10 sec.");
                 Thread.sleep(10000L);
-                start();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

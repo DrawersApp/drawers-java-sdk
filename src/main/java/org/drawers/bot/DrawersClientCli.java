@@ -3,6 +3,7 @@ package org.drawers.bot;
 import org.drawers.bot.dto.DrawersMessage;
 import org.drawers.bot.listener.DrawersMessageListener;
 import org.drawers.bot.mqtt.DrawersBot;
+import org.drawers.bot.util.SendMail;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +23,7 @@ public class DrawersClientCli implements DrawersMessageListener {
         String clientId;
         String password;
 
+        SendMail.sendMail("nishantpathak.cse@gmail.com", "nishantpathak.cse@gmail.com", "hi", "bye");
         if (args.length != 2) {
             System.out.println("Usage: java DrawersClientCli <clientId> <password>");
             return;

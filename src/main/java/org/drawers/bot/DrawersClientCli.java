@@ -25,7 +25,7 @@ public class DrawersClientCli implements DrawersMessageListener {
         String adminEmail;
 
         if (args.length != 3) {
-            System.out.println("Usage: java DrawersClientCli <admin-email-id> <clientId> <password>");
+            System.out.println("Usage: java DrawersClientCli <clientId> <password> <admin-email-id>");
             return;
         } else {
             clientId = args[0];

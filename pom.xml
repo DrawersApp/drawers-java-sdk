@@ -32,7 +32,7 @@
         <dependency>
             <groupId>com.github.DrawersApp</groupId>
             <artifactId>drawers-models</artifactId>
-            <version>master-SNAPSHOT</version>
+            <version>v1.4</version>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>

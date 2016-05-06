@@ -9,14 +9,35 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import java.util.Properties;
 
 public class SendMail {
-    public static void sendMail(String from, String to, String subject, String body)
+
+    private static final SendMail sendMail = new SendMail();
+    private String adminEmail;
+    private int sendMailDelay = 15 * 60 * 1000; // ms
+    private long lastSendTime = 0L;
+
+    private SendMail() {
+    }
+
+    public void setAdminEmail(String adminEmail) {
+        this.adminEmail = adminEmail;
+    }
+
+    public static SendMail getInstance() {
+        return sendMail;
+    }
+
+    public void sendMail(String subject, String body)
     {
+        if (System.currentTimeMillis() - lastSendTime < sendMailDelay) {
+            return;
+        }
+        lastSendTime = System.currentTimeMillis();
         try {
             final Properties p = new Properties();
             p.put("mail.smtp.host", "localhost");
             final Message msg = new MimeMessage(Session.getDefaultInstance(p));
-            msg.setFrom(new InternetAddress(from));
-            msg.addRecipient(RecipientType.TO, new InternetAddress(to));
+            msg.setFrom(new InternetAddress("bot@drawers.in"));
+            msg.addRecipient(RecipientType.TO, new InternetAddress(adminEmail));
             msg.setSubject(subject);
             msg.setText(body);
             Transport.send(msg);

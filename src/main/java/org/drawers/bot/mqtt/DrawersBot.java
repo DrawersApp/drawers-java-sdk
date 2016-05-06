@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import org.drawers.bot.crypto.DrawersCryptoEngine;
 import org.drawers.bot.dto.DrawersMessage;
 import org.drawers.bot.listener.DrawersMessageListener;
+import org.drawers.bot.util.SendMail;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -58,7 +59,11 @@ public final class DrawersBot implements MqttCallback {
         return executorService;
     }
 
+    private boolean isStartFailed;
+    private Exception exception;
+
     public void start() {
+        isStartFailed = false;
         try {
             MemoryPersistence persistence = new MemoryPersistence();
             mqttClient = new MqttClient(getServerUrl(), clientId, persistence);
@@ -77,11 +82,20 @@ public final class DrawersBot implements MqttCallback {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            start();
+            System.err.println("Will retry after 10 sec.");
+            isStartFailed = true;
+            exception = ex;
         } finally {
             try {
-                System.err.println("Will retry after 10 sec.");
-                Thread.sleep(10000L);
+                if (isStartFailed) {
+                    System.out.println("sleeping zzzz");
+                    Thread.sleep(10000L);
+                    start();
+                    SendMail.getInstance().sendMail("Bot restart failed",
+                            "Weather changed this time, Check below crash log for more details" +
+                            "Contact harshit.bangar@gmail.com, nishantpathak.cse@gmail.com in " +
+                            "case of any help\n" + "Stack trace:\n"  + Arrays.toString(exception.getStackTrace()));
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

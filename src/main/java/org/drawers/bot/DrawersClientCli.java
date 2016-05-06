@@ -22,18 +22,22 @@ public class DrawersClientCli implements DrawersMessageListener {
     public static void main(String [] args) {
         String clientId;
         String password;
+        String adminEmail;
 
-        SendMail.sendMail("nishantpathak.cse@gmail.com", "nishantpathak.cse@gmail.com", "hi", "bye");
-        if (args.length != 2) {
-            System.out.println("Usage: java DrawersClientCli <clientId> <password>");
+        if (args.length != 3) {
+            System.out.println("Usage: java DrawersClientCli <admin-email-id> <clientId> <password>");
             return;
         } else {
             clientId = args[0];
             password = args[1];
+            adminEmail = args[2];
         }
 
         DrawersClientCli client = new DrawersClientCli(clientId, password);
         client.startBot();
+        SendMail.getInstance().setAdminEmail(adminEmail);
+        SendMail.getInstance().sendMail("Welcome to Drawers Bot",
+                "Your bot is up and running now.");
     }
 
     private void startBot() {

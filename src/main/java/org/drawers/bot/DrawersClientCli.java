@@ -35,7 +35,7 @@ public class DrawersClientCli implements DrawersMessageListener {
         SendMail.getInstance().setAdminEmail(adminEmail);
         SendMail.getInstance().sendMail("Welcome to Drawers Bot",
                 "Your bot is up and running now.");
-        DrawersClientCli client = new DrawersClientCli(clientId, password);
+        client = new DrawersClientCli(clientId, password);
 
         // this should be the last line at it blocks
         client.startBot();
@@ -48,6 +48,12 @@ public class DrawersClientCli implements DrawersMessageListener {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onConnected() {
+        // Bot is connected.. subscribe now.
+
     }
 
     @Override

@@ -27,6 +27,10 @@ public class DrawersClient implements DrawersMessageListener {
         }
     }
 
+    @Override
+    public void onConnected() {
+
+    }
 
     @Override
     public MqttChatMessage processMessageAndReply(MqttChatMessage message) {

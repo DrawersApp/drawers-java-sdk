@@ -1,9 +1,9 @@
 package org.drawers.bot.mqtt;
 
 import com.drawers.dao.MqttChatMessage;
+import com.drawers.dao.mqttinterface.PublisherImpl;
 import com.google.gson.Gson;
 import org.drawers.bot.crypto.DrawersCryptoEngine;
-import org.drawers.bot.dto.DrawersMessage;
 import org.drawers.bot.listener.DrawersMessageListener;
 import org.drawers.bot.util.SendMail;
 import org.eclipse.paho.client.mqttv3.*;
@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by nishant.pathak on 08/04/16.
  */
-public final class DrawersBot implements MqttCallback {
+public final class DrawersBot implements MqttCallback, PublisherImpl {
 
     private String clientId;
     private String password;
@@ -43,7 +43,6 @@ public final class DrawersBot implements MqttCallback {
         this.clientId = clientId;
         this.password = password;
         this.messageListener = messageListener;
-
     }
 
     private static String getServerUrl() {
@@ -123,6 +122,7 @@ public final class DrawersBot implements MqttCallback {
 
     private static final Gson gson = new Gson();
 
+    // only for processing and replying text message with text message (one to one)
     private void messageArrivedInternal(String topic, MqttMessage message) {
         try {
             String incomingMessage = new String(message.getPayload());
@@ -133,12 +133,15 @@ public final class DrawersBot implements MqttCallback {
                 return;
             }
 
-            DrawersMessage reply = messageListener.processMessageAndReply(new DrawersMessage(topic, URLDecoder.decode(chatMessage.message, "UTF-8")));
+            chatMessage.message = URLDecoder.decode(chatMessage.message, "UTF-8");
 
-            MqttChatMessage replyChatMessage = new MqttChatMessage(UUID.randomUUID().toString(), URLEncoder.encode(reply.getMessage(), "UTF-8"),
-                    mqttClient.getClientId(), reply.getChatType(), false);
+            MqttChatMessage reply = messageListener.processMessageAndReply(chatMessage);
 
-            String encryptedMessage = DRAWERS_CRYPTO_ENGINE.aesEncrypt(gson.toJson(replyChatMessage));
+            // TODO: small size
+            reply.messageId = UUID.randomUUID().toString();
+            reply.message = URLEncoder.encode(reply.message, "UTF-8");
+
+            String encryptedMessage = DRAWERS_CRYPTO_ENGINE.aesEncrypt(gson.toJson(reply));
             MqttMessage mqttMessage = new MqttMessage();
             mqttMessage.setPayload(encryptedMessage.getBytes());
             mqttMessage.setQos(1);
@@ -152,5 +155,37 @@ public final class DrawersBot implements MqttCallback {
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
         System.out.println("Delivery Complete: " + token.toString());
+    }
+
+    @Override
+    public IMqttDeliveryToken publish(String topic, MqttMessage message,
+                                      String invocationContext, String activityToken) {
+        try {
+            mqttClient.publish(topic, message);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void subscribe(final String topic, final int qos,
+                          String invocationContext, String activityToken) {
+        try {
+            mqttClient.subscribe(topic, qos);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void unsubscribe(final String topic, String invocationContext,
+                            String activityToken) {
+        try {
+            mqttClient.unsubscribe(topic);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
     }
 }

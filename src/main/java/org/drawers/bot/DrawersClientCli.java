@@ -1,6 +1,5 @@
 package org.drawers.bot;
 
-import com.drawers.dao.MqttChatMessage;
 import org.drawers.bot.listener.DrawersMessageListener;
 import org.drawers.bot.mqtt.DrawersBot;
 import org.drawers.bot.util.SendMail;
@@ -52,14 +51,7 @@ public class DrawersClientCli implements DrawersMessageListener {
 
     @Override
     public void onConnected() {
-        // Bot is connected.. subscribe now.
-
-    }
-
-    @Override
-    public MqttChatMessage processMessageAndReply(MqttChatMessage message) {
-        System.out.println("Received new message: " + message);
-        return message;
+        // Bot is connected and subscribed to others messages
 
     }
 }

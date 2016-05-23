@@ -1,6 +1,5 @@
 package org.drawers.bot;
 
-import com.drawers.dao.MqttChatMessage;
 import org.drawers.bot.listener.DrawersMessageListener;
 import org.drawers.bot.mqtt.DrawersBot;
 
@@ -30,10 +29,5 @@ public class DrawersClient implements DrawersMessageListener {
     @Override
     public void onConnected() {
 
-    }
-
-    @Override
-    public MqttChatMessage processMessageAndReply(MqttChatMessage message) {
-        return null;
     }
 }

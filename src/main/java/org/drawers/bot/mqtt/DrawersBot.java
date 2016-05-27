@@ -5,6 +5,7 @@ import com.drawers.dao.mqttinterface.PublisherImpl;
 import com.drawers.dao.packets.MqttChat;
 import com.drawers.dao.packets.MqttProviderManager;
 import com.drawers.dao.packets.ParseFailedException;
+import com.drawers.dao.packets.SubscribeOthers;
 import org.drawers.bot.crypto.DrawersCryptoEngine;
 import org.drawers.bot.listener.DrawersMessageListener;
 import org.drawers.bot.util.SendMail;
@@ -71,7 +72,7 @@ public final class DrawersBot implements MqttCallback, PublisherImpl {
             mqttClient.connect();
             System.out.println("connected");
             mqttClient.setCallback(this);
-            mqttClient.subscribe(clientId + MqttChat.NAMESPACE, MqttChat.QOS);
+            mqttClient.subscribe(clientId + SubscribeOthers.OTHERS_NAMESPACE, MqttChat.QOS);
 
             messageListener.onConnected();
 

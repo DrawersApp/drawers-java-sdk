@@ -69,7 +69,7 @@ public final class DrawersBot implements MqttCallback, PublisherImpl {
             connOpts.setConnectionTimeout(10);
 
             System.out.println("Connecting to broker");
-            mqttClient.connect();
+            mqttClient.connect(connOpts);
             System.out.println("connected");
             mqttClient.setCallback(this);
             mqttClient.subscribe(clientId + SubscribeOthers.OTHERS_NAMESPACE, MqttChat.QOS);

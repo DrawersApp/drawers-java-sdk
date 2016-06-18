@@ -28,7 +28,7 @@ public final class DrawersBot implements MqttCallback, PublisherImpl {
     private ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_COUNT);
 
 
-    private static final String SERVER_URL = "mqtt-lb.sandwitch.in";
+    private static final String SERVER_URL = "mqtt-server.sandwitch.in";
     private static final String PROTOCOL = "tcp://";
     private static final String PROTOCOL_SECURE = "ssl://";
     private static final int SERVER_PORT = 80;

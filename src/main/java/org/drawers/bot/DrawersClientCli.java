@@ -1,6 +1,6 @@
 package org.drawers.bot;
 
-import org.drawers.bot.listener.DrawersMessageListener;
+import org.drawers.bot.listener.ConnectionStateListener;
 import org.drawers.bot.mqtt.DrawersBot;
 import org.drawers.bot.util.SendMail;
 
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by nishant.pathak on 08/04/16.
  */
-public class DrawersClientCli implements DrawersMessageListener {
+public class DrawersClientCli implements ConnectionStateListener {
 
     private static DrawersBot bot;
     private static DrawersClientCli client;
@@ -53,5 +53,10 @@ public class DrawersClientCli implements DrawersMessageListener {
     public void onConnected() {
         // Bot is connected and subscribed to others messages
 
+    }
+
+    @Override
+    public void onConnectionLost() {
+        // Connection lost, do necessary cleanup
     }
 }

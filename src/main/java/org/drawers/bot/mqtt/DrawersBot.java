@@ -7,7 +7,7 @@ import com.drawers.dao.packets.MqttProviderManager;
 import com.drawers.dao.packets.ParseFailedException;
 import com.drawers.dao.packets.SubscribeOthers;
 import org.drawers.bot.crypto.DrawersCryptoEngine;
-import org.drawers.bot.listener.DrawersMessageListener;
+import org.drawers.bot.listener.ConnectionStateListener;
 import org.drawers.bot.util.SendMail;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -36,9 +36,9 @@ public final class DrawersBot implements MqttCallback, PublisherImpl {
     private static final int DEFAULT_THREAD_COUNT = 5;
     private static final int MAX_MESSAGE_HISTORY = 20000;
 
-    private DrawersMessageListener messageListener;
+    private ConnectionStateListener messageListener;
 
-    public DrawersBot(String clientId, String password, DrawersMessageListener messageListener) {
+    public DrawersBot(String clientId, String password, ConnectionStateListener messageListener) {
         this.clientId = clientId;
         this.password = password;
         this.messageListener = messageListener;
@@ -105,6 +105,7 @@ public final class DrawersBot implements MqttCallback, PublisherImpl {
         System.out.println("Connection lost due to:");
         cause.printStackTrace();
         start();
+        messageListener.onConnectionLost();
     }
 
     @Override
